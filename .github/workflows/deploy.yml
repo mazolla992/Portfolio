@@ -1,0 +1,25 @@
+name: Deploy to Timeweb VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TIMEWEB_HOST }}
+          username: root
+          key: ${{ secrets.TIMEWEB_SSH_KEY }}
+          script: |
+            set -e
+            cd /app/artel-site
+            git pull
+            npm install --legacy-peer-deps
+            npm run build
+            pm2 restart artel-site
