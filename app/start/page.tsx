@@ -156,12 +156,23 @@ function StartForm() {
     return e
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length > 0) { setErrors(errs); return }
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  const errs = validate()
+  if (Object.keys(errs).length > 0) { setErrors(errs); return }
+  
+  try {
+    const res = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    })
+    if (!res.ok) throw new Error()
     setSubmitted(true)
+  } catch {
+    alert('Ошибка при отправке. Попробуйте ещё раз.')
   }
+}
 
   const set = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }))
