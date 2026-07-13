@@ -1,26 +1,28 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-
-const inter = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-inter' })
+import PortfolioMotion from '@/components/PortfolioMotion'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://artel.ai'),
+  metadataBase: new URL('https://artel-ai.ru'),
+  icons: {
+    icon: '/portfolio_favicon_transparent.png',
+    shortcut: '/portfolio_favicon_transparent.png',
+    apple: '/portfolio_favicon_transparent.png',
+  },
   title: {
-    default: 'Артель — AI-автоматизация для малого бизнеса',
-    template: '%s | Артель',
+    default: 'Евгений — портфолио веб-разработчика',
+    template: '%s | Евгений',
   },
   description:
-    'Помогаем малому бизнесу привлекать клиентов и автоматизировать продажи с помощью AI-ботов и умных сайтов.',
+    'Портфолио Евгения: сайты, лендинги, интерфейсы и страницы под идею.',
   openGraph: {
     type: 'website',
     locale: 'ru_RU',
-    siteName: 'Артель',
-    title: 'Артель — AI-автоматизация для малого бизнеса',
+    siteName: 'Евгений',
+    title: 'Евгений — портфолио веб-разработчика',
     description:
-      'Помогаем малому бизнесу привлекать клиентов и автоматизировать продажи с помощью AI-ботов и умных сайтов.',
+      'Красивые сайты, портфолио, лендинги и интерфейсы с фокусом на доверие и заявки.',
   },
   twitter: {
     card: 'summary_large_image',
@@ -33,11 +35,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={inter.variable}>
-      <body className="flex flex-col min-h-screen">
+    <html lang="ru">
+      <body className="flex min-h-screen flex-col">
+        <PortfolioMotion />
         <Header />
         <main className="flex-1">{children}</main>
-        <Footer />
       </body>
     </html>
   )

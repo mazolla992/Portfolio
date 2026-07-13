@@ -20,10 +20,16 @@ export default function Contact() {
               Оставить заявку
             </Link>
             <a
+              href="https://t.me/gektorbarbossa0"
+              className="border border-brand-400 text-white hover:bg-brand-600 transition-colors px-8 py-4 rounded-xl font-semibold text-base"
+            >
+              Телеграм
+            </a>
+            <a
               href="mailto:artel.ai@yandex.com"
               className="border border-brand-400 text-white hover:bg-brand-600 transition-colors px-8 py-4 rounded-xl font-semibold text-base"
             >
-              artel.ai@yandex.com
+              Yandex.ru
             </a>
           </div>
 

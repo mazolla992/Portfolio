@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix artel-site run dev",
+    "build": "npm --prefix artel-site run build",
+    "start": "npm --prefix artel-site run start",
+    "lint": "npm --prefix artel-site run lint"
+  }
+}

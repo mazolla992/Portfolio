@@ -71,7 +71,7 @@ export default function BusinessNiches() {
             href="/start"
             className="btn-primary inline-block px-8 py-4 text-base"
           >
-            Обсудить проект
+            Написать Евгению
           </Link>
         </div>
       </div>
