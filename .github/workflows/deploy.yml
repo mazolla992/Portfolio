@@ -10,16 +10,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check build
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install and build
+        run: |
+          npm install --prefix artel-site --legacy-peer-deps
+          npm --prefix artel-site run build
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
+          port: ${{ secrets.TIMEWEB_PORT || 22 }}
           username: root
           key: ${{ secrets.TIMEWEB_SSH_KEY }}
+          timeout: 60s
+          command_timeout: 10m
           script: |
             set -e
             cd /app/artel-site
-            git pull
-            npm install --legacy-peer-deps
-            npm run build
+            git pull --ff-only
+            npm install --prefix artel-site --legacy-peer-deps
+            npm --prefix artel-site run build
             pm2 restart artel-site
