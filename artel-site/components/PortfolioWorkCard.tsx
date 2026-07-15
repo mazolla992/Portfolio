@@ -78,7 +78,6 @@ export default function PortfolioWorkCard({ work, index }: PortfolioWorkCardProp
             </div>
           )}
           <div className="portfolio-work-title">
-            <p>{work.eyebrow}</p>
             <h3>{work.title}</h3>
           </div>
         </div>
