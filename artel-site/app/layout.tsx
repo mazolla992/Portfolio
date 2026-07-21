@@ -4,7 +4,7 @@ import Header from '@/components/Header'
 import PortfolioMotion from '@/components/PortfolioMotion'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://artel-ai.ru'),
+  metadataBase: new URL('https://kruchinkin.site'),
   icons: {
     icon: '/portfolio_favicon_transparent.png',
     shortcut: '/portfolio_favicon_transparent.png',

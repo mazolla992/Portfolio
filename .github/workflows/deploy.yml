@@ -1,9 +1,14 @@
-name: Deploy to Timeweb VPS
+name: Deploy kruchinkin.site
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-kruchinkin-site
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -13,17 +18,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check build
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          cache: npm
+          cache-dependency-path: artel-site/package-lock.json
 
-      - name: Install and build
+      - name: Verify production build
         run: |
-          npm install --prefix artel-site --legacy-peer-deps
+          npm ci --prefix artel-site --legacy-peer-deps
           npm --prefix artel-site run build
 
-      - name: Deploy via SSH
+      - name: Upload isolated application directory
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.TIMEWEB_HOST }}
+          port: ${{ secrets.TIMEWEB_PORT || 22 }}
+          username: root
+          key: ${{ secrets.TIMEWEB_SSH_KEY }}
+          source: "artel-site/app,artel-site/components,artel-site/lib,artel-site/public,artel-site/package.json,artel-site/package-lock.json,artel-site/next.config.js,artel-site/postcss.config.js,artel-site/tailwind.config.ts,artel-site/tsconfig.json,artel-site/next-env.d.ts,deploy"
+          target: /var/www/kruchinkin.site
+          rm: true
+
+      - name: Build and activate kruchinkin.site
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
@@ -31,11 +49,52 @@ jobs:
           username: root
           key: ${{ secrets.TIMEWEB_SSH_KEY }}
           timeout: 60s
-          command_timeout: 10m
+          command_timeout: 15m
           script: |
-            set -e
-            cd /app/artel-site
-            git pull --ff-only
-            npm install --prefix artel-site --legacy-peer-deps
-            npm --prefix artel-site run build
-            pm2 restart artel-site
+            set -euo pipefail
+
+            ROOT_DIR=/var/www/kruchinkin.site
+            APP_DIR="$ROOT_DIR/artel-site"
+            APP_NAME=kruchinkin-site
+            APP_PORT=3002
+
+            cd "$APP_DIR"
+            npm ci --legacy-peer-deps
+            npm run build
+
+            if pm2 describe "$APP_NAME" >/dev/null 2>&1; then
+              pm2 restart "$APP_NAME" --update-env
+            else
+              if ss -ltn | awk '{print $4}' | grep -Eq "(^|:)${APP_PORT}$"; then
+                echo "Port ${APP_PORT} is already occupied by another service"
+                exit 1
+              fi
+              pm2 start npm --name "$APP_NAME" -- start -- -p "$APP_PORT" -H 127.0.0.1
+            fi
+
+            sleep 4
+            curl --fail --silent --show-error "http://127.0.0.1:${APP_PORT}/" >/dev/null
+
+            mkdir -p /var/www/certbot /root/backups
+            if [ -f /etc/nginx/sites-available/kruchinkin.site ]; then
+              cp /etc/nginx/sites-available/kruchinkin.site "/root/backups/kruchinkin.site.$(date +%Y%m%d-%H%M%S).conf"
+            fi
+
+            if [ ! -f /etc/letsencrypt/live/kruchinkin.site/fullchain.pem ]; then
+              cp "$ROOT_DIR/deploy/nginx-kruchinkin.http.conf" /etc/nginx/sites-available/kruchinkin.site
+              ln -sfn /etc/nginx/sites-available/kruchinkin.site /etc/nginx/sites-enabled/kruchinkin.site
+              nginx -t
+              systemctl reload nginx
+              certbot certonly --webroot --webroot-path /var/www/certbot \
+                --non-interactive --agree-tos --register-unsafely-without-email \
+                -d kruchinkin.site -d www.kruchinkin.site
+            fi
+
+            cp "$ROOT_DIR/deploy/nginx-kruchinkin.conf" /etc/nginx/sites-available/kruchinkin.site
+            ln -sfn /etc/nginx/sites-available/kruchinkin.site /etc/nginx/sites-enabled/kruchinkin.site
+            nginx -t
+            systemctl reload nginx
+            pm2 save
+
+            curl --fail --silent --show-error https://kruchinkin.site/ >/dev/null
+            curl --fail --silent --show-error https://www.kruchinkin.site/ >/dev/null
