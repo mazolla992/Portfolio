@@ -16,6 +16,11 @@ export default function Hero() {
           AI-автоматизация для бизнеса
         </span>
 
+        {/* Pre-heading */}
+        <p className="text-sm sm:text-base font-semibold text-brand-600 uppercase tracking-widest mb-3">
+          Перестань бегать — начни управлять
+        </p>
+
         {/* Heading */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
           AI-автоматизация<br />
@@ -24,7 +29,8 @@ export default function Hero() {
 
         {/* Subheading */}
         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Сайт привлекает, бот конвертирует, клиенты возвращаются. Под ключ&nbsp;— от&nbsp;2&nbsp;900&nbsp;₽/мес.
+          Клиенты пишут в бота, записи приходят, выручка растёт.<br />
+          Вы не трогаете технику. От&nbsp;2&nbsp;900&nbsp;₽/мес.
         </p>
 
         {/* CTAs */}

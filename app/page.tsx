@@ -1,32 +1,18 @@
 import type { Metadata } from 'next'
-import Hero from '@/components/Hero'
-import HowItWorks from '@/components/HowItWorks'
-import Pricing from '@/components/Pricing'
-import Niches from '@/components/Niches'
-import CasesTeaser from '@/components/CasesTeaser'
-import Contact from '@/components/Contact'
+import PortfolioHome from '@/components/PortfolioHome'
 
 export const metadata: Metadata = {
-  title: 'Артель — AI-автоматизация для малого бизнеса',
+  title: 'Евгений — портфолио веб-разработчика',
   description:
-    'Сайт привлекает, AI-бот конвертирует, клиенты возвращаются. Подключите автоматизацию для своего бизнеса от 2 900 ₽/мес.',
+    'Портфолио Евгения: красивые сайты, лендинги, интерфейсы и страницы под идею.',
   openGraph: {
-    title: 'Артель — AI-автоматизация для малого бизнеса',
+    title: 'Евгений — портфолио веб-разработчика',
     description:
-      'Сайт привлекает, AI-бот конвертирует, клиенты возвращаются. Подключите автоматизацию для своего бизнеса от 2 900 ₽/мес.',
-    url: 'https://artel.ai',
+      'Работы, подход и форматы проектов: сайты, лендинги, интерфейсы и страницы под идею.',
+    url: 'https://artel-ai.ru',
   },
 }
 
 export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <HowItWorks />
-      <Pricing />
-      <Niches />
-      <CasesTeaser />
-      <Contact />
-    </>
-  )
+  return <PortfolioHome />
 }

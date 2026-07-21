@@ -68,7 +68,7 @@ export default function Niches() {
         <div className="mt-12 text-center">
           <p className="text-gray-500 text-sm mb-4">Ваша ниша не в списке? Мы работаем с любым бизнесом.</p>
           <Link href="/custom" className="btn-primary">
-            Обсудить проект
+            Написать
           </Link>
         </div>
       </div>

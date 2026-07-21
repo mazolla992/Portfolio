@@ -1,71 +1,38 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import PortfolioWorkCard from '@/components/PortfolioWorkCard'
+import { cases } from '@/lib/cases'
 
 export const metadata: Metadata = {
   title: 'Кейсы',
-  description:
-    'Реальные результаты бизнесов, которые автоматизировали привлечение и удержание клиентов с Артелью.',
-  openGraph: {
-    title: 'Кейсы | Артель',
-    description:
-      'Реальные результаты бизнесов, которые автоматизировали привлечение и удержание клиентов с Артелью.',
-    url: 'https://artel.ai/cases',
-  },
+  description: 'Кейсы Евгения: сайты, портфолио и интерфейсы с фокусом на доверие и заявки.',
 }
+
+const accents = ['from-emerald-300 to-cyan-300', 'from-lime-300 to-yellow-200', 'from-orange-300 to-rose-300', 'from-lime-300 to-emerald-400']
 
 export default function CasesPage() {
   return (
-    <div className="py-16 px-4 bg-gray-50 min-h-screen">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <p className="text-brand-600 font-semibold text-sm mb-2">Результаты клиентов</p>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
-            Кейсы
-          </h1>
-          <p className="text-gray-500 max-w-xl mx-auto text-lg">
-            Первые результаты появятся в июне 2026 — сейчас проходим запуск.
-          </p>
+    <div className="min-h-screen bg-[#070807] px-4 pb-24 pt-32 text-white">
+      <div className="mx-auto max-w-7xl">
+        <div className="portfolio-reveal mb-12">
+          <p className="portfolio-eyebrow">Кейсы</p>
+          <h1 className="portfolio-section-title">Мои работы</h1>
         </div>
 
-        {/* Case card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
-          {/* Header band */}
-          <div className="bg-brand-700 px-8 py-6 flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center text-white font-extrabold text-2xl">
-              N
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-white">NiceOne</h2>
-              <p className="text-brand-200 text-sm">Компьютерный клуб · Гатчина</p>
-            </div>
-            <span className="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-200 text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-              В процессе
-            </span>
-          </div>
-
-          <div className="p-8">
-            {/* Story */}
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Первый клиент Артели. Бот запущен в апреле 2026. Принимает вопросы, ведёт базу клиентов, отправляет напоминания о визитах.
-            </p>
-          </div>
-        </div>
-
-        {/* Coming soon */}
-        <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center">
-          <p className="text-gray-400 text-sm font-medium mb-1">Скоро</p>
-          <p className="text-gray-500 text-sm">Новые кейсы появятся здесь. Мы регулярно публикуем результаты клиентов.</p>
-        </div>
-
-        {/* CTA */}
-        <div className="mt-12 bg-white rounded-2xl border border-brand-100 p-10 text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Хотите стать следующим кейсом?</h2>
-          <p className="text-gray-500 text-sm mb-6">Первый месяц бесплатно за честный отзыв.</p>
-          <Link href="/start" className="btn-primary">
-            Подключиться
-          </Link>
+        <div className="grid gap-5 lg:grid-cols-3">
+          {cases.map((item, index) => (
+            <PortfolioWorkCard
+              key={item.slug}
+              index={index}
+              work={{
+                title: item.title,
+                href: `/cases/${item.slug}`,
+                type: item.category,
+                description: item.summary,
+                image: item.image ?? undefined,
+                accent: accents[index] ?? accents[0],
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
