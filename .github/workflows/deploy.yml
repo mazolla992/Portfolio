@@ -31,6 +31,7 @@ jobs:
           npm --prefix artel-site run build
 
       - name: Upload isolated application directory
+        if: github.event_name == 'workflow_dispatch'
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
@@ -42,6 +43,7 @@ jobs:
           rm: true
 
       - name: Build and activate kruchinkin.site
+        if: github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TIMEWEB_HOST }}
